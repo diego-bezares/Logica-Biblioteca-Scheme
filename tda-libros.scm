@@ -36,6 +36,35 @@
 
 ;-----------SELECTORES------------
 (define get-id-libro (lambda (l) (list-ref 0)))
+(define get-titulo-libro (lambda (l) (list-ref 1)))
+(define get-autor-libro (lambda (l) (list-ref 2)))
+(define disponible? (lambda (l) (list-ref 3)))
+
+
+
+;----------MODIFICADORES----------
+(define prestar (lambda (l)
+                        (list (get-id-libro l)
+                              (get-titulo-libro l)
+                              (get-autor-libro l)
+                              #f
+                        )
+                )
+)
+
+(define devolver (lambda (l)
+                         (list (get-id-libro l)
+                               (get-titulo-libro l)
+                               (get-autor-libro l)
+                               #t
+                         )
+                  )
+)
+
+
+
+;-------OTRAS FUNCIONES-------
+...
 
 
 
