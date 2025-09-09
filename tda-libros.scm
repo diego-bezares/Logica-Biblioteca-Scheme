@@ -44,7 +44,12 @@
 
 (defina crear_libro 
         (lambda (id titulo autor)
-                (list id (string-a-min titulo) (string-a-min autor) #t)
+                (if (and (integer? id)
+                         (string? titulo)
+                         (string? autor))
+                    (list id (string-a-min titulo) (string-a-min autor) #t)
+                    null
+                )
         )
 )
 
