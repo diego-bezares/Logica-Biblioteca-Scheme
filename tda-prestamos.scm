@@ -39,3 +39,27 @@
 
 
 
+;---------CONSTRUCTORES-----------
+(define crear-prestamo
+        (lambda (id id-usuario id-libro fecha-prestamo dias-solicitados)
+                (list id 
+                      id-usuario 
+                      id-libro 
+                      fecha-prestamo 
+                      dias-solicitados
+                )
+        )
+)
+
+
+
+;-----FUNCIÓN DE PERMANENCIA------
+
+
+
+
+
+
+
+
+
