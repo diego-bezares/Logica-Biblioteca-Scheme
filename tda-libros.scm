@@ -13,52 +13,88 @@
 ;  autor -> string en minúscula
 ;  disponibilidad -> booleano
 
+;---------------------------------
+;---------------------------------
+
+
+
+;------------------------------------------------------
+;------------------------------------------------------
+; AUX (SACAR EL N-ÉSIMO TÉRMINO DE UNA LISTA)
+
+(define n-esimo-termino
+  (lambda (l n i)
+          (if (= i n)
+              (car l)
+              (n-esimo-termino (cdr l) n (+ i 1))
+          )
+  )
+)
+
+;-----------------------------------------------------
+;-----------------------------------------------------
+
+
+
+
 
 
 ;---------CONSTRUCTORES-----------
 (define (string-a-min s) (string-downcase s))
 
-(defina crear_libro (lambda (id titulo autor)
-                            (list id (string-a-min titulo) (string-a-min autor) #t)
-                    )
+(defina crear_libro 
+        (lambda (id titulo autor)
+                (list id (string-a-min titulo) (string-a-min autor) #t)
+        )
 )
 
 
 
 ;-----FUNCIÓN DE PERMANENCIA------
-(define libro? (lambda (l) 
-                       (and (list? l)
-                            (= (length l) 4)
-                       )
-               )
+(define libro? 
+  (lambda (l) 
+          (and (list? l)
+               (= (length l) 4)
+          )
+  )
 )
 
 
 ;-----------SELECTORES------------
-(define get-id-libro (lambda (l) (list-ref 0)))
-(define get-titulo-libro (lambda (l) (list-ref 1)))
-(define get-autor-libro (lambda (l) (list-ref 2)))
-(define disponible? (lambda (l) (list-ref 3)))
+(define get-id-libro 
+  (lambda (l) 
+          (n-esimo-termino l 1 1)))
+(define get-titulo-libro 
+  (lambda (l) 
+          (n-esimo-termino l 2 1)))
+(define get-autor-libro 
+  (lambda (l) 
+          (n-esimo-termino l 3 1)))
+(define disponible? 
+  (lambda (l) 
+          (n-esimo-termino l 4 1)))
 
 
 
 ;----------MODIFICADORES----------
-(define prestar (lambda (l)
-                        (list (get-id-libro l)
-                              (get-titulo-libro l)
-                              (get-autor-libro l)
-                              #f
-                        )
-                )
+(define prestar 
+  (lambda (l)
+          (list (get-id-libro l)
+                (get-titulo-libro l)
+                (get-autor-libro l)
+                #f
+          )
+  )
 )
 
-(define devolver (lambda (l)
-                         (list (get-id-libro l)
-                               (get-titulo-libro l)
-                               (get-autor-libro l)
-                               #t
-                         )
-                  )
+(define devolver 
+  (lambda (l)
+          (list (get-id-libro l)
+                (get-titulo-libro l)
+                (get-autor-libro l)
+                #t
+          )
+  )
 )
 
 
