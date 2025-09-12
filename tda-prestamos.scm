@@ -42,11 +42,18 @@
 ;---------CONSTRUCTORES-----------
 (define crear-prestamo
         (lambda (id id-usuario id-libro fecha-prestamo dias-solicitados)
-                (list id 
-                      id-usuario 
-                      id-libro 
-                      fecha-prestamo 
-                      dias-solicitados
+                (if (and (integer? id)
+                         (integer? id-usuario)
+                         (integer? id-libro)
+                         (string? fecha-prestamo)
+                         (integer? dias-solicitados))
+                    (list id 
+                          id-usuario 
+                          id-libro 
+                          fecha-prestamo 
+                          dias-solicitados
+                    )
+                    null
                 )
         )
 )
@@ -54,6 +61,69 @@
 
 
 ;-----FUNCIÓN DE PERMANENCIA------
+(define prestamo?
+  (lambda (p)
+          (if (and (= (length p) 5)
+                   (list? p))
+              #t
+              #f
+          )
+  )
+)
+
+
+
+;------------SELECTORES-----------
+(define get-id-prestamo
+  (lambda (p)
+          (n-esimo-termino p 1 1)
+  )
+)
+
+(define get-id-prestamo-usuario
+  (lambda (p)
+          (n-esimo-termino p 2 1)
+  )
+)
+
+(define get-id-prestamo-libro
+  (lambda (p)
+          (n-esimo-termino p 3 1)
+  )
+)
+
+(define get-fecha-prestamo
+  (lambda (p)
+          (n-esimo-termino p 4 1)
+  )
+)
+
+(define get-dias-prestamo
+  (lambda (p)
+          (n-esimo-termino p 5 1)
+  )
+)
+
+
+
+;----------MODIFICADORES----------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
