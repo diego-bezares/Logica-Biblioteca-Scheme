@@ -14,7 +14,7 @@
 
 ;------------------------------------------------------
 ;------------------------------------------------------
-; AUX (SACAR EL N-ÉSIMO TÉRMINO DE UNA LISTA)
+; FUNICIONES AUX
 
 (define n-esimo-termino
   (lambda (l n i)
