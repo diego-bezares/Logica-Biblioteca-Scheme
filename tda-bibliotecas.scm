@@ -26,6 +26,30 @@
 
 
 
+
+;------------------------------------------------------
+;------------------------------------------------------
+; AUX (SACAR EL N-ÉSIMO TÉRMINO DE UNA LISTA)
+
+(define n-esimo-termino
+  (lambda (l n i)
+          (if (= i n)
+              (car l)
+              (n-esimo-termino (cdr l) n (+ i 1))
+          )
+  )
+)
+
+;-----------------------------------------------------
+;-----------------------------------------------------
+
+
+
+
+
+
+
+
 ;----------CONSTRUCTORES----------
 (define init-biblioteca
    (lambda (libros usuarios prestamos max-libros-usuario dias-max-prestamo tasa-multa-diaria limite-deuda dias-max-retraso fecha-inicial)
