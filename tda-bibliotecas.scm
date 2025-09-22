@@ -117,7 +117,20 @@
 
 
 ;----------MODIFICADORES---------
-(define 
+(define set-fecha-biblioteca
+   (lambda (b nueva-fecha)
+           (init-biblioteca (get-libros b) 
+                            (get-usuarios b)
+                            (get-prestamos b)
+                            (get-max-libros-usuario b)
+                            (get-dias-max-prestamo b)
+                            (get-tasa-multa-diaria b)
+                            (get-limite-deuda b)
+                            (get-dias-max-retraso b)
+                            nueva-fecha
+           )
+   )
+)
 
 
 
