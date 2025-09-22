@@ -40,7 +40,7 @@
 
 
 ;---------CONSTRUCTORES-----------
-(define crear-prestamo
+(define init-prestamo
         (lambda (id id-usuario id-libro fecha-prestamo dias-solicitados)
                 (if (and (integer? id)
                          (integer? id-usuario)
