@@ -31,7 +31,7 @@
 
 
 ;--------CONSTRUCTOR---------
-(define crear_usuario 
+(define init-usuario 
   (lambda (id nombre)
           (if (and (integer? id)
                    (string? nombre))
@@ -97,9 +97,6 @@
 
 
 
-
-;-----OTRAS FUNCIONES-----
-....
 
 
 
