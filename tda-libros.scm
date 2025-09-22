@@ -31,6 +31,7 @@
   )
 )
 
+; AUX (CONVIERTE A MINÚSCULA TODO UN STRING)
 (define string-minus
   (lambda (str)
           (list->string 
@@ -50,7 +51,7 @@
 ;---------CONSTRUCTORES-----------
 (define (string-a-min s) (string-downcase s))
 
-(defina crear_libro 
+(defina init-libro 
         (lambda (id titulo autor)
                 (if (and (integer? id)
                          (string? titulo)
@@ -90,30 +91,21 @@
 
 
 ;----------MODIFICADORES----------
-(define prestar 
+(define set-disponibilidad 
   (lambda (l)
           (list (get-id-libro l)
                 (get-titulo-libro l)
                 (get-autor-libro l)
-                #f
-          )
-  )
-)
-
-(define devolver 
-  (lambda (l)
-          (list (get-id-libro l)
-                (get-titulo-libro l)
-                (get-autor-libro l)
-                #t
+                (if (n-esimo-termino l 4 1)
+                    #f
+                    #t
+                )
           )
   )
 )
 
 
 
-;-------OTRAS FUNCIONES-------
-...
 
 
 
