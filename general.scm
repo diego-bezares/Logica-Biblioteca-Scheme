@@ -1,7 +1,7 @@
-(require tda-usuarios)
-(require tda-prestamos)
-(require tda-libros)
-(require tda-bibliotecas)
+(provide tda-usuarios)
+(provide tda-prestamos)
+(provide tda-libros)
+(provide tda-bibliotecas)
 
 
 
