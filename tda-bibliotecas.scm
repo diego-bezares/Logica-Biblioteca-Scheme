@@ -27,7 +27,7 @@
 
 
 ;----------CONSTRUCTORES----------
-(define crear-biblioteca
+(define init-biblioteca
    (lambda (libros usuarios prestamos max-libros-usuario dias-max-prestamo tasa-multa-diaria limite-deuda dias-max-retraso fecha-inicial)
            (if (and (list? libros)
                     (list? usuarios)
