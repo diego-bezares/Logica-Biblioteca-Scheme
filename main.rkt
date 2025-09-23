@@ -19,7 +19,8 @@
         )
 )
 
-
+;FECHA->DIAS (Se pasa de formato "DD/MM" a un entero de dias, considerando que todos los meses tienen 30 dias)
+(define
 
 
 
@@ -140,15 +141,10 @@
         (cond
            [(string=? (string-minus criterio) "id")
                 (if (integer? valor)
-                        (let (libros (get-libros b))
-                                (define (buscar lista)
-                                        (cond
-                                           [(null? lista)
-                                                null]
-                                           [(= (get-id-libro (car lista)) valor)
-                                                (car lista)]
-                                           [(else (buscar (cdr lista)))]
-                                        )
+                        (let ([libros (get-libros b)])
+                                (filter (lambda (libro)
+                                                (= (get-id-libro libro) valor))
+                                        libros
                                 )
                         )
                         (display "Error: El criterio no es válido")
@@ -156,23 +152,99 @@
            ]      
            [(string=? (string-minus criterio) "autor")
                 (if (string? valor)
-                        (let (libros (get-libros b))
-                                (define (buscar lista)
-                                        (cond
-                                           [(null? lista)
-                                                null]
-                                           [(string=? (get-autor-libro (car lista)) (string-minus valor))
-                                                (car lista)]
-                                           [(else (buscar (cdr lista)))]
-                                        )
+                        (let ([libros (get-libros b)])
+                                (car (filter (lambda (libro)
+                                                (string=? (get-autor-libro libro) (string-minus valor)))
+                                        libros
+                                     )
                                 )
                         )
                         (display "Error: El criterio no es válido")
                 )
 
-           ]     
+           ]
+           [(string=? (string-minus criterio) "titulo")
+                 (if (string? valor)
+                        (let ([libros (get-libros b)])
+                                (car (filter (lambda (libro)
+                                                (string=? (get-titulo-libro libro) (string-minus valor)))
+                                        libros
+                                     )
+                                )
+                        )
+                        (display "Error: El criterio no es válido")
+                 )   
+           ]
+           [(else (display "Error: El criterio no es válido"))]     
+        )
+)
+
+;RF10
+;Dom -> (Libro) libro
+;Rec -> int id
+(define (get-libro-id libro)
+        (get-id-libro libro)
+)
+
+;RF11
+;Dom -> (Biblioteca) biblioteca
+;Rec -> string fecha
+(define (get-fecha biblioteca)
+        (get-fecha-inicial biblioteca)
+)
+
+;RF12
+;Dom -> (Biblioteca) biblioteca, int id-libro
+;Rec -> boolean
+(define (libro-disponible? b id-libro)
+        (if (null? (buscar-libro b "id" id-libro))
+                #f
+                (disponible? (buscar-libro b "id" id-libro))
+        )
+)
+
+;RF13
+;Dom -> (Usuario) usuario
+;Rec -> boolean
+(define (usuario-suspendido? usuario)
+        (activo? usuario)
+)
+
+;RF14
+;Dom -> (Usuario) usuario
+;Rec -> int deuda
+(define (obtener-deuda usuario)
+        (get-deuda-usuario usuario)
+)
+
+;RF15
+;Dom -> (Prestamo) prestamo
+;Rec -> string fecha
+(define (obtener-fecha-vencimiento prestamo)
+        
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
 
 
 
