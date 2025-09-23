@@ -19,8 +19,52 @@
         )
 )
 
+;FECHA->LISTA (Se pasa de formato "DD/MM" a una lista de: ((int)DD, (int)MM))
+(define (fecha->lista fecha)
+        (map string->number (list (string-append 
+                                        (car (map number->string 
+                                                (filter number? (map 
+                                                                (lambda (c) (string->number (string c))) (string->list fecha))
+                                                )
+                                             )
+                                        )
+                                        (cadr (map number->string 
+                                                (filter number? (map 
+                                                                (lambda (c) (string->number (string c))) (string->list fecha))
+                                                )
+                                              )
+                                        )
+                                  ) 
+                                  (string-append 
+                                        (caddr (map number->string 
+                                                (filter number? (map 
+                                                                (lambda (c) (string->number (string c))) (string->list fecha))
+                                                )
+                                               )
+                                        ) 
+                                        (cadddr (map number->string 
+                                                (filter number? (map 
+                                                                (lambda (c) (string->number (string c))) (string->list fecha))
+                                                ))
+                                        )
+                                  )
+                            )
+        ) 
+)
+
 ;FECHA->DIAS (Se pasa de formato "DD/MM" a un entero de dias, considerando que todos los meses tienen 30 dias)
-(define
+(define (fecha->dias fecha)
+        (+ (* (- (n-esimo-termino (fecha->lista fecha) 2 1) 1) 30) (n-esimo-termino (fecha->lista fecha) 1 1))
+)
+
+;DIAS->FECHA (Se pasa de un enterio dias a formato "DD/MM", considerando que todos los meses tienen 30 dias)
+(define (dias->fecha dias)
+        (string-append 
+                (number->string (+ (modulo (- dias 1) 30) 1))
+                "/"
+                (number->string (+ (quotient (- dias 1) 30) 1))
+        )
+)
 
 
 
@@ -221,8 +265,33 @@
 ;Dom -> (Prestamo) prestamo
 ;Rec -> string fecha
 (define (obtener-fecha-vencimiento prestamo)
-        
+        (dias->fecha (+ (fecha->dias (get-fecha-prestamo prestamo)) (get-dias-prestamo pestamo)))
+)
 
+;RF16
+;Dom -> string fecha-vencimiento, string fecha-actual
+;Rec -> int dias-retraso
+(define (calcular-dias-retraso fecha-vencimiento fecha-actual)
+        (if (<= (fecha->dias fecha-actual) (fecha->dias fecha-vencimiento))
+                0
+                (- (fecha->dias fecha-actual) (fecha->dias fecha-vencimiento))
+        )
+)
+
+;RF17
+;Dom -> (Prestamo) prestamo, string fecha-actual, int tasa-multa-diaria
+;Rec -> int multa
+(define (calcular-multa prestamo fecha-actual tasa-multa-diaria)
+        (if (= (calcular-dias-retraso (obtener-fecha-vencimiento prestamo) fecha-actual) 0)
+                0
+                (* (calcular-dias-retraso (obtener-fecha-vencimiento prestamo) fecha-actual) tasa-multa-diaria)
+        )
+)
+        
+;RF18
+;Dom -> (Biblioteca) biblioteca, int id-usuario, int id-libro, int dias-solicitados, string fecha-actual
+;Rec -> Biblioteca
+(define (tomar-prestamo 
 
 
 
