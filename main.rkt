@@ -118,7 +118,7 @@
 ;Dom -> (Biblioteca) biblioteca, int id
 ;Rec -> Usuario o null
 (define (obtener-usuario b id)
-    (let ([usuarios (get-usuarios b)])  
+    (let (usuarios (get-usuarios b))  
         (define (buscar lista)
                 (cond
                    [(null? lista)
@@ -136,9 +136,40 @@
 ;Dom -> (Biblioteca) biblioteca, string criterio, (string/int) valor
 ;Rec -> Libro o null
 (define (buscar-libro b criterio valor)
-        
+        (cond
+           [(string=? (string-minus criterio) "id")
+                (if (integer? valor)
+                        (let (libros (get-libros b))
+                                (define (buscar lista)
+                                        (cond
+                                           [(null? lista)
+                                                null]
+                                           [(= (get-id-libro (car lista)) valor)
+                                                (car lista)]
+                                           [(else (buscar (cdr lista)))]
+                                        )
+                                )
+                        )
+                        (display "Error: El criterio no es válido")
+                )
+           ]      
+           [(string=? (string-minus criterio) "autor")
+                (if (string? valor)
+                        (let (libros (get-libros b))
+                                (define (buscar lista)
+                                        (cond
+                                           [(null? lista)
+                                                null]
+                                           [(string=? (get-autor-libro (car lista)) (string-minus valor))
+                                                (car lista)]
+                                           [(else (buscar (cdr lista)))]
+                                        )
+                                )
+                        )
+                        (display "Error: El criterio no es válido")
+                )
 
-
+           ]     
 
 
 
