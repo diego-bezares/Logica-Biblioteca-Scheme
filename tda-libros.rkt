@@ -49,14 +49,12 @@
 
 
 ;---------CONSTRUCTORES-----------
-(define (string-a-min s) (string-downcase s))
-
 (defina init-libro 
         (lambda (id titulo autor)
                 (if (and (integer? id)
                          (string? titulo)
                          (string? autor))
-                    (list id (string-a-min titulo) (string-a-min autor) #t)
+                    (list id (string-minus titulo) (string-minus autor) #t)
                     null
                 )
         )
