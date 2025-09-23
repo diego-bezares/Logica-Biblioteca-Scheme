@@ -1,3 +1,21 @@
+#lang racket
+
+(provide init-biblioteca
+         biblioteca?
+         get-libros
+         get-usuarios
+         get-prestamos
+         get-max-libros-usuario
+         get-dias-max-prestamo
+         get-tasa-multa-diaria
+         get-limite-deuda
+         get-dias-max-retraso
+         get-fecha-inicial
+         set-fecha-biblioteca) 
+
+
+        
+          
 ;---------------------------------
 ;-------TDA de Bibliotecas--------
 ;---------------------------------
