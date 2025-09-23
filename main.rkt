@@ -1,7 +1,8 @@
-(require "tda-usuarios")
-(require "tda-prestamos")
-(require "tda-libros")
-(require "tda-bibliotecas")
+#lang racket
+(require "tda-usuario.rkt")
+(require "tda-prestamos.rkt")
+(require "tda-libros.rkt")
+(require "tda-bibliotecas.rkt")
 
 
 
