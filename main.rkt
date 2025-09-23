@@ -25,8 +25,6 @@
 
 
 
-
-
 ;==============================
 ;======IMPLEMENTACIÓN RF=======
 ;==============================
@@ -121,15 +119,24 @@
 ;Rec -> Usuario o null
 (define (obtener-usuario b id)
     (let ([usuarios (get-usuarios b)])  
-         (if (ormap (lambda (sub-u) 
-                            (= (get-id-usuario sub-u) id))
-                    usuarios)
-   
-         )
+        (define (buscar lista)
+                (cond
+                   [(null? lista)
+                        null]
+                   [(= (get-id-usuario (car lista)) id)
+                        (car lista)]
+                   [(else (buscar (cdr lista)))]
+                )
+        )
+        (buscar usuarios)
     )
 )
 
-
+;RF09
+;Dom -> (Biblioteca) biblioteca, string criterio, (string/int) valor
+;Rec -> Libro o null
+(define (buscar-libro b criterio valor)
+        
 
 
 
