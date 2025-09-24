@@ -70,7 +70,7 @@
 (define (actualizar-libros biblioteca libro-actualizado)
 				(cons libro-actualizado (filter 
 											(lambda (libro)
-													(!= (get-id-libro libro) (get-id-libro libro-actualizado))
+													(not (= (get-id-libro libro) (get-id-libro libro-actualizado)))
 											)
 											(get-libros biblioteca)
 										)
@@ -136,7 +136,7 @@
                                (get-max-libros-usuario b)
                                (get-dias-max-prestamo b)
                                (get-tasa-multa-diaria b)
-                               (get-limite-deuda-max b)
+                               (get-limite-deuda b)
                                (get-dias-max-retraso b)
                                (get-fecha-inicial b)
              )
