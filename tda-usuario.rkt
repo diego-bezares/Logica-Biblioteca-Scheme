@@ -60,7 +60,7 @@
 (define usuario? 
   (lambda (u)
           (and (list? u)
-               (= (lenght u) 5))
+               (= (length u) 5))
   )
 )
 
