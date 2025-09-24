@@ -251,7 +251,7 @@
 ;Dom -> (Usuario) usuario
 ;Rec -> boolean
 (define (usuario-suspendido? usuario)
-        (activo? usuario)
+        (not (activo? usuario))
 )
 
 ;RF14
@@ -291,7 +291,20 @@
 ;RF18
 ;Dom -> (Biblioteca) biblioteca, int id-usuario, int id-libro, int dias-solicitados, string fecha-actual
 ;Rec -> Biblioteca
-(define (tomar-prestamo 
+(define (tomar-prestamo biblioteca id-usuario id-libro dias-solicitados fecha-actual)
+        (if (and
+                (libro-disponible? biblioteca id-libro)
+                (not (usuario-suspenido? (obtener-usuario biblioteca id-usuario)))
+                (< (length (get-prestamos-usuario (obtener-usuario biblioteca id-usuario))) (get-max-libros-usuario biblioteca))
+                (>= (get-dias-max-prestamo biblioteca) dias-solicitados)
+                (>=(get-limite-deuda biblioteca) (get-deuda-usuario (obtener-usuario biblioteca id-usuario)))
+            )
+                (     
+
+                )
+        )
+
+)
 
 
 
