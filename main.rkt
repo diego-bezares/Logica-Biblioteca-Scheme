@@ -69,11 +69,11 @@
 ;ACTUALIZAR-LIBROS (Agrega a una copia de la lista de libros de la biblioteca un libro actualizado, quitando el original)
 (define (actualizar-libros biblioteca libro-actualizado)
 				(cons libro-actualizado (filter 
-																	(lambda (libro)
-																					(!= (get-id-libro libro) (get-id-libro libro-actualizado))
-																	)
-																	(get-libros biblioteca)
-																)
+											(lambda (libro)
+													(!= (get-id-libro libro) (get-id-libro libro-actualizado))
+											)
+											(get-libros biblioteca)
+										)
 				)
 )
 
