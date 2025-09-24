@@ -1,3 +1,16 @@
+#lang racket
+
+(provide init-usuario
+         usuario?
+         get-id-usuario
+         get-nombre-usuario
+         get-deuda-usuario
+         activo?
+         get-prestamos-usuario
+         actualizar-deuda
+         suspender-usuario
+         reactivar-usuario)
+
 ;--------------------------
 ;-------TDA Usuarios-------
 
@@ -39,6 +52,7 @@
               null
           )
   )
+)
 
 
 
@@ -96,7 +110,16 @@
 )
 
 
-
+(define reactivar-usuario 
+  (lambda (u)
+          (list (get-id-usuario u)
+                (get-nombre-usuario u)
+                (get-deuda-usuario u)
+                #t
+                (get-prestamos-usuario u)
+          )
+  )
+)
 
 
 
