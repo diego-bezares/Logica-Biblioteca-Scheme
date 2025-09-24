@@ -1,3 +1,15 @@
+#lang racket
+
+(provide init-libro
+         libro?
+         get-id-libro
+         get-titulo-libro
+         get-autor-libro
+         disponible?
+         set-disponibilidad
+         string-minus
+         n-esimo-termino) 
+
 
 ;---------------------------------
 ;----------TDA de Libros----------
@@ -49,7 +61,7 @@
 
 
 ;---------CONSTRUCTORES-----------
-(defina init-libro 
+(define init-libro 
         (lambda (id titulo autor)
                 (if (and (integer? id)
                          (string? titulo)
