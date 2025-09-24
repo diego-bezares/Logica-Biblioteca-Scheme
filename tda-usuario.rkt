@@ -9,7 +9,8 @@
          get-prestamos-usuario
          actualizar-deuda
          suspender-usuario
-         reactivar-usuario)
+         reactivar-usuario
+         set-prestamos)
 
 ;--------------------------
 ;-------TDA Usuarios-------
@@ -117,6 +118,18 @@
                 (get-deuda-usuario u)
                 #t
                 (get-prestamos-usuario u)
+          )
+  )
+)
+
+
+(define set-prestamos
+  (lambda (u id-libro)
+          (list (get-id-usuario u)
+                (get-nombre-usuario u)
+                (get-deuda-usuario u)
+                (activo? u)
+                (cons id-libro (get-prestamos-usuario u))
           )
   )
 )
