@@ -122,7 +122,7 @@
 ;----------MODIFICADORES----------
 (define set-fecha-prestamo
    (lambda (p nueva-fecha)
-           (crear-prestamo (get-id-prestamo p)
+           (init-prestamo (get-id-prestamo p)
                            (get-id-prestamo-usuario p)
                            (get-id-prestamo-libro p)
                            nueva-fecha
@@ -133,7 +133,7 @@
 
 (define set-dias-prestamo
    (lambda (p nuevos-dias)
-           (crear-prestamo (get-id-prestamo p)
+           (init-prestamo (get-id-prestamo p)
                            (get-id-prestamo-usuario p)
                            (get-id-prestamo-libro p)
                            (get-fecha-prestamo p)
