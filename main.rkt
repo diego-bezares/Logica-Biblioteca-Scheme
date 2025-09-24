@@ -326,7 +326,7 @@
                 (>=(get-limite-deuda biblioteca) (get-deuda-usuario (obtener-usuario biblioteca id-usuario)))
             )
                 (crear-biblioteca (actualizar-libros biblioteca (set-disponibilidad (buscar-libro biblioteca "id" id-libro)))
-								  (actualizar-usuarios biblioteca (set-prestamos (obtener-usuario biblioteca id-usuario) id-libro))
+								  (actualizar-usuarios biblioteca (agregar-prestamos (obtener-usuario biblioteca id-usuario) id-libro))
 								  (cons (crear-prestamo (siguiente-id-prestamo (get-prestamos biblioteca))
 														id-usuario
 														id-libro
@@ -352,6 +352,14 @@
 ;Dom -> (Biblioteca) biblioteca, int id-usuario, int id-libro, string fecha-actual
 ;Rec -> Biblioteca
 (define (devolver-libro biblioteca id-usuario id-libro fecha-actual)
+		(crear-biblioteca (actualizar-libros biblioteca (set-disponibilidad (buscar-libro biblioteca "id" id-libro)))
+						  (actualizar-usuarios biblioteca (init-usuario
+																		id-usuario
+											              )
+						
+						  )
+		)
+										
 )
 
 
