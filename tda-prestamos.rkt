@@ -1,3 +1,16 @@
+#lang racket
+
+(provide init-prestamo
+         prestamo?
+         get-id-prestamo
+         get-id-prestamo-usuario
+         get-id-prestamo-libro
+         get-fecha-prestamo
+         get-dias-prestamo
+         set-fecha-prestamo
+         set-dias-prestamo)
+
+
 ;---------------------------------
 ;---------TDA de Préstamos--------
 ;---------------------------------
