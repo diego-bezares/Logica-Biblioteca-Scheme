@@ -325,11 +325,8 @@
                 (>= (get-dias-max-prestamo biblioteca) dias-solicitados)
                 (>=(get-limite-deuda biblioteca) (get-deuda-usuario (obtener-usuario biblioteca id-usuario)))
             )
-                (crear-biblioteca (actualizar-libros biblioteca (set-disponibilidad (buscar-libro biblioteca "id" id-libro)
-																)
-								  )
-								  (actualizar-usuarios biblioteca
-								  )
+                (crear-biblioteca (actualizar-libros biblioteca (set-disponibilidad (buscar-libro biblioteca "id" id-libro)))
+								  (actualizar-usuarios biblioteca (set-prestamos (obtener-usuario biblioteca id-usuario) id-libro))
 								  (cons (crear-prestamo (siguiente-id-prestamo (get-prestamos biblioteca))
 														id-usuario
 														id-libro
@@ -351,6 +348,11 @@
 
 )
 
+;RF19
+;Dom -> (Biblioteca) biblioteca, int id-usuario, int id-libro, string fecha-actual
+;Rec -> Biblioteca
+(define (devolver-libro biblioteca id-usuario id-libro fecha-actual)
+)
 
 
 
