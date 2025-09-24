@@ -8,7 +8,7 @@
          activo?
          get-prestamos-usuario
          actualizar-deuda
-         suspender-usuario
+         suspender-usuariotda
          reactivar-usuario
          set-prestamos)
 
@@ -99,7 +99,7 @@
 )
           
 
-(define suspender-usuario 
+(define suspender-usuariotda 
   (lambda (u)
           (list (get-id-usuario u)
                 (get-nombre-usuario u)
