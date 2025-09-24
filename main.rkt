@@ -77,7 +77,25 @@
 				)
 )
 
+;ACTUALIZAR-USUARIOS (Agrega a una copia de la lista de usuarios de la biblioteca un usuario actualizado, quitando el original, sin embargo, LO AGREGA AL FINAL)
+(define (actualizar-usuarios biblioteca usuario-actualizado)
+				(append (filter 
+							(lambda (usuario)
+									(not (= (get-id-usuario usuario) (get-id-libro usuario-actualizado)))
+							)
+							(get-libros biblioteca)
+						)
+				usuario-actualizado		
+				)
+)
 
+;SIGUIENTE-ID-PRESTAMO (Calculo el id del siguiente préstamo que se haga, tomando en cuenta el último hecho. Si no hay préstamos, comienza de 1)
+(define (siguiente-id-prestamo prestamos)
+		(if (null? prestamos)
+			1
+			(+ (get-id-prestamo (car prestamos)) 1)
+		)
+)
 
 ;==============================
 ;======IMPLEMENTACIÓN RF=======
@@ -160,7 +178,7 @@
                                (get-max-libros-usuario b)
                                (get-dias-max-prestamo b)
                                (get-tasa-multa-diaria b)
-                               (get-limite-deuda-max b)
+                               (get-limite-deuda b)
                                (get-dias-max-retraso b)
                                (get-fecha-inicial b)
              )
@@ -172,14 +190,14 @@
 ;Dom -> (Biblioteca) biblioteca, int id
 ;Rec -> Usuario o null
 (define (obtener-usuario b id)
-    (let (usuarios (get-usuarios b))  
+    (let ([usuarios (get-usuarios b)])  
         (define (buscar lista)
                 (cond
                    [(null? lista)
                         null]
                    [(= (get-id-usuario (car lista)) id)
                         (car lista)]
-                   [(else (buscar (cdr lista)))]
+                   [else (buscar (cdr lista))]
                 )
         )
         (buscar usuarios)
@@ -227,7 +245,7 @@
                         (display "Error: El criterio no es válido")
                  )   
            ]
-           [(else (display "Error: El criterio no es válido"))]     
+           [else (display "Error: El criterio no es válido")]     
         )
 )
 
@@ -273,7 +291,7 @@
 ;Dom -> (Prestamo) prestamo
 ;Rec -> string fecha
 (define (obtener-fecha-vencimiento prestamo)
-        (dias->fecha (+ (fecha->dias (get-fecha-prestamo prestamo)) (get-dias-prestamo pestamo)))
+        (dias->fecha (+ (fecha->dias (get-fecha-prestamo prestamo)) (get-dias-prestamo prestamo)))
 )
 
 ;RF16
@@ -307,9 +325,28 @@
                 (>= (get-dias-max-prestamo biblioteca) dias-solicitados)
                 (>=(get-limite-deuda biblioteca) (get-deuda-usuario (obtener-usuario biblioteca id-usuario)))
             )
-                (     
+                (crear-biblioteca (actualizar-libros biblioteca (set-disponibilidad (buscar-libro biblioteca "id" id-libro)
+																)
+								  )
+								  (actualizar-usuarios biblioteca
+								  )
+								  (cons (crear-prestamo (siguiente-id-prestamo (get-prestamos biblioteca))
+														id-usuario
+														id-libro
+														fecha-actual
+														dias-solicitados
+										)
+
+								  )
+								  (get-max-libros-usuario biblioteca)
+         						  (get-dias-max-prestamo biblioteca)
+         						  (get-tasa-multa-diaria biblioteca)
+                                  (get-limite-deuda biblioteca)
+                                  (get-dias-max-retraso biblioteca)
+                                  (get-fecha-inicial biblioteca)
 
                 )
+				biblioteca
         )
 
 )
