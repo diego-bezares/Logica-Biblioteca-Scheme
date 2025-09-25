@@ -342,7 +342,7 @@
 						  )])
         (if (and
                 (libro-disponible? biblioteca id-libro)
-                (not (usuario-suspenido? (obtener-usuario biblioteca id-usuario)))
+                (not (usuario-suspendido? (obtener-usuario biblioteca id-usuario)))
                 (< (length (get-prestamos-usuario (obtener-usuario biblioteca id-usuario))) (get-max-libros-usuario biblioteca))
                 (>= (get-dias-max-prestamo biblioteca) dias-solicitados)
                 (>=(get-limite-deuda biblioteca) (get-deuda-usuario (obtener-usuario biblioteca id-usuario)))
@@ -539,7 +539,7 @@
                               "Préstamo #" (number->string (get-id-prestamo p))
                               " - Libro " (number->string (get-id-prestamo-libro p))
                               " - Prestado: " (get-fecha-prestamo p)
-                              " - Vence: " (get-fecha-vencimiento p)
+                              " - Vence: " (obtener-fecha-vencimiento p)
                               " - " (if (> (fecha->dias (obtener-fecha-vencimiento prestamo)) (fecha->dias fecha-actual)) "Activo" "Inactivo")
                               "\n"))
                            prestamos)])
