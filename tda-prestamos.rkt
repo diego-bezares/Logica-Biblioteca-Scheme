@@ -33,25 +33,6 @@
 
 
 
-;------------------------------------------------------
-;------------------------------------------------------
-; AUX (SACAR EL N-ÉSIMO TÉRMINO DE UNA LISTA)
-
-(define n-esimo-termino
-  (lambda (l n i)
-          (if (= i n)
-              (car l)
-              (n-esimo-termino (cdr l) n (+ i 1))
-          )
-  )
-)
-
-;-----------------------------------------------------
-;-----------------------------------------------------
-
-
-
-
 ;---------CONSTRUCTORES-----------
 (define init-prestamo
         (lambda (id id-usuario id-libro fecha-prestamo dias-solicitados)
@@ -89,31 +70,31 @@
 ;------------SELECTORES-----------
 (define get-id-prestamo
   (lambda (p)
-          (n-esimo-termino p 1 1)
+          (car p)
   )
 )
 
 (define get-id-prestamo-usuario
   (lambda (p)
-          (n-esimo-termino p 2 1)
+          (cadr p)
   )
 )
 
 (define get-id-prestamo-libro
   (lambda (p)
-          (n-esimo-termino p 3 1)
+          (caddr p)
   )
 )
 
 (define get-fecha-prestamo
   (lambda (p)
-          (n-esimo-termino p 4 1)
+          (cadddr p)
   )
 )
 
 (define get-dias-prestamo
   (lambda (p)
-          (n-esimo-termino p 5 1)
+          (caddddr p)
   )
 )
 
