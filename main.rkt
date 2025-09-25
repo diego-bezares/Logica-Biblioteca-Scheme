@@ -576,9 +576,35 @@
 ;Dom -> (Biblioteca) bilioteca
 ;Rec -> Biblioteca
 (define (procesar-dia biblioteca)
-		()
+		(let ([nueva-fecha-actual (dias->fecha (+ (fecha->dias (get-fecha-inicial biblioteca)) 1))])
+				(crear-biblioteca (get-libros biblioteca)
+								  (map (lambda (usuario) (if (debe-suspender? biblioteca (get-id-usuario usuario) nueva-fecha-actual)
+															 (suspender-usuario biblioteca (get-id-usuario usuario))
+															 usuario
+														   )
+									     )
+									(map (lambda (usuario) (actualizar-deuda (apply + 
+																				(map (lambda (prestamo) (calcular-multa prestamo nueva-fecha-actual (get-tasa-multa-diaria biblioteca)))
+																						(get-prestamos-usuario usuario)))
+																		   usuario)
+									   )
+										(get-usuarios biblioteca)
+								  	)
+								  )
+								  (get-max-libros-usuario biblioteca)
+								  (get-dias-max-prestamo biblioteca)
+								  (get-tasa-multa-diaria biblioteca)
+								  (get-limite-deuda biblioteca)
+								  (get-dias-max-retraso biblioteca)
+								  nueva-fecha-actual
+				)
+		)
 
 )
+
+;================================================
+;=============FIN IMPLEMENTACIÓN RF==============
+;================================================
 
 
 
