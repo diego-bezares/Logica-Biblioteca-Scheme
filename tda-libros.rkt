@@ -75,16 +75,16 @@
 ;-----------SELECTORES------------
 (define get-id-libro 
   (lambda (l) 
-          (car l)
+          (car l)))
 (define get-titulo-libro 
   (lambda (l) 
-          (cadr l)
+          (cadr l)))
 (define get-autor-libro 
   (lambda (l) 
-          (caddr l)
+          (caddr l)))
 (define disponible? 
   (lambda (l) 
-          (cadddr l)
+          (cadddr l)))
 
 
 
