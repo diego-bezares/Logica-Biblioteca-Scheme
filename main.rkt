@@ -607,6 +607,7 @@
 										(get-usuarios biblioteca)
 								  	)
 								  )
+								  (get-prestamos biblioteca)
 								  (get-max-libros-usuario biblioteca)
 								  (get-dias-max-prestamo biblioteca)
 								  (get-tasa-multa-diaria biblioteca)
