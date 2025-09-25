@@ -4,6 +4,22 @@
 (require "tda-libros.rkt")
 (require "tda-bibliotecas.rkt")
 
+(provide crear-usuario
+		 crear-libro
+		 crear-biblioteca
+		 agregar-libro
+		 registrar-usuario
+		 tomar-prestamo
+		 devolver-libro
+		 renovar-prestamo
+		 pagar-deuda
+		 usuario-suspendido?
+		 get-fecha
+		 procesar-dia
+		 historial-prestamos-sistema
+		 historial-prestamos-usuario
+)
+
 
 
 ;==============================
