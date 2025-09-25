@@ -11,41 +11,47 @@
 
 
 ;; Crear usuarios
-(define u1 (crear-usuario 1 "Jose"))
-(define u2 (crear-usuario 2 "Carlos"))
+(define u1 (crear-usuario 1 "Martin"))
+(define u2 (crear-usuario 2 "Sofia"))
+(define u3 (crear-usuario 3 "Diego"))
 
 
-;; Crear libros (solo 2)
-(define l1 (crear-libro 101 "El Hobbit" "J.R.R. Tolkien"))
-(define l2 (crear-libro 102 "1984" "George Orwell"))
+;; Crear libros
+(define l1 (crear-libro 101 "Harry Potter Y La Piedra Filosofal" "J.K. Rowling"))
+(define l2 (crear-libro 102 "las ventajas de ser invisible" "Stephen Chbosky"))
+(define l3 (crear-libro 103 "Mundo de cartón" "Gloria A. Alegría"))
+(define l4 (crear-libro 104 "It" "Stephen King"))
 
 
 ;; Crear biblioteca con fecha inicial 01/01
-;; max-dias: 3, tasa-multa: 100/día, dias-max-retraso: 1
+;; max-dias: 3, tasa-multa: 150/día, dias-max-retraso: 1
 (define b1 (crear-biblioteca '()    ; sin libros inicialmente
                             '()    ; sin usuarios inicialmente
                             '()    ; sin préstamos inicialmente
                             2      ; max libros por usuario
                             3      ; max días por préstamo
-                            100    ; tasa multa por día
-                            1000   ; deuda máxima
+                            150    ; tasa multa por día
+                            500   ; deuda máxima
                             1      ; días máx de retraso antes de suspensión
-                            "01/01")) ; fecha inicial del sistema
+                            "25/09")) ; fecha inicial del sistema
 
 
 ;; Agregar libros
-(define b2 (agregar-libro b1 l1))
-(define b3 (agregar-libro b2 l2))
+(define b1.1 (agregar-libro b1 l1))
+(define b1.2 (agregar-libro b1.1 l2))
+(define b1.3 (agregar-libro b1.2 l3))
+(define b1.4 (agregar-libro b1.3 l4))
 
 
 ;; Registrar usuarios
-(define b4 (registrar-usuario b3 u1))
-(define b5 (registrar-usuario b4 u2))
+(define b1.5 (registrar-usuario b1.4 u1))
+(define b1.6 (registrar-usuario b1.5 u2))
+(define b1.7 (registrar-usuario b1.6 u3))
 
 
-(display "Sistema configurado: 2 libros, 2 usuarios\n")
-(display "Configuración: máx 3 días préstamo, multa $100/día, suspensión tras 1 día retraso\n")
-(display "Fecha inicial: ") (display (get-fecha b5)) (newline)
+(display "Sistema configurado: 4 libros, 3 usuarios\n")
+(display "Configuración: máx 3 días préstamo, multa $150/día, suspensión tras 1 día retraso\n")
+(display "Fecha inicial: ") (display (get-fecha b1.7)) (newline)
 (newline)
 
 
@@ -54,8 +60,8 @@
 ;; -------------------------------------------------
 
 
-(display "=== DÍA 01/01 ===\n")
-(display "Jose toma prestado 'El Hobbit' por 3 días\n")
+(display "=== DÍA 25/09 ===\n")
+(display "Sofía toma prestado 'las ventajas de ser invisible' por 3 días\n")
 (define b6 (tomar-prestamo b5 1 101 3 "01/01"))
 (display "Préstamo realizado - debe devolver el 04/01\n\n")
 
