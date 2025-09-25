@@ -69,10 +69,8 @@
 ;; Avanzar día por día
 (display "=== PROCESAR DÍA ===\n")
 (define b1.9 (procesar-dia b1.8))
-(display "Fecha actual: ") (display (get-fecha b1.9))
+(display "Fecha actual: ") (display (get-fecha b1.9)) (newline)
 (display "Hoy vence el préstamo de Sofía\n\n")
-(newline)
-(newline)
 
 (display "=== PROCESAR DÍA ===\n")
 (define b1.10 (procesar-dia b1.9))
@@ -80,7 +78,7 @@
 (display "Sofía intenta tomar otro libro\n")
 (define b1.10-intento (tomar-prestamo b1.10 2 101 2 (get-fecha b1.10)))
 (display "¿Logró tomarlo? ")
-(display (if (eq? b1.10 b1.10-intento) (display "No lo tomó: Excede el max. de prestamos\n") (display "Error: Lo tomó\n")))
+(display (if (eq? b1.10 b1.10-intento) (display "No lo tomó: Excede el max. de prestamos\n\n") (display "Error: Lo tomó\n\n")))
 
 (display "=== PROCESAR DÍA ===\n")
 (define b1.11 (procesar-dia b1.10))
@@ -97,54 +95,34 @@
 (display "Martin intenta tomar 'las ventajas de ser invisible' que aún tiene Sofía\n")
 (define b1.12-intento (tomar-prestamo b1.12 1 102 2 (get-fecha b1.12)))
 (display "¿Logró tomarlo? ")
-(display (if (eq? b1.12 b1.12-intento) (display "No lo tomó: No está disponible\n") (display "Error: Lo tomó\n")))
+(display (if (eq? b1.12 b1.12-intento) (display "No lo tomó: No está disponible\n\n") (display "Error: Lo tomó\n\n")))
     
 (display "=== PROCESAR DÍA ===\n")
 (define b1.13 (procesar-dia b1.12))
 (display "Fecha actual: ") (display (get-fecha b1.13)) (newline)
-;(define b1.14 (devolver-libro b1.13 2 102 (get-fecha b1.13))) ******
-;(display "Sofía devuelve el libro y sigue suspendida") *******
-;    (define jose-deudor (obtener-usuario b12 1))
-;    (display "Deuda de Jose: $") (display (obtener-deuda jose-deudor)) (newline)
-;    (display "¿Suspendido? ") (display (usuario-suspendido? jose-deudor))
-;    (display " (Sí - excedió días de retraso)\n\n")
+(define b1.14 (devolver-libro b1.13 2 102 (get-fecha b1.13)))
+(display "Sofía devuelve el libro y sigue suspendida")
+(define u1.30_09 (obtener-usuario b1.14 1))
+(display "Martin ahora toma el libro que tenía Sofía\n")
+(define b1.14-intento (tomar-prestamo b1.14 1 102 2 (get-fecha b1.14)))
+(display "¿Logró tomarlo? ")
+(display (if (eq? b1.14 b1.14-intento) (display "Error: No lo tomó\n\n") (display "Lo tomó: El libro cambió su diponibilidad\n\n")))
+
     
     
-;    (display "=== INTENTO DE PAGO PARCIAL ===\n")
-;    (display "Jose paga $50\n")
-;    (define b13 (pagar-deuda b12 1 50))
-;    (define jose-parcial (obtener-usuario b13 1))
-;    (display "Deuda restante: $") (display (obtener-deuda jose-parcial)) (newline)
-;    (display "¿Sigue suspendido? ") (display (usuario-suspendido? jose-parcial))
-;    (display " (Sí - debe pagar TODO)\n\n")
+(display "=== INTENTO DE PAGO PARCIAL ===\n")
+(display "Sofía paga toda su deuda\n")
+(define u2.30_09 (obtener-usuario b1.14-intento 2))
+(define b1.15 (pagar-deuda b1.14-intento 2 (obtener-deuda u2.30_09)))
+(define u2.30_09.2 (obtener-usuario b1.15 2))
+(display "Pago exitoso! -> Deuda actual: $") (obtener-deuda u2.30_09.2)
+(display "¿Sofía está suspendida?\n") (if (usuario-suspendido? u2.30_09.2) (display "Error: Si está suspendida\n\n") (display "No, vuelve a estar activa\n\n"))
+
+(display "===== HISTORIAL PRÉSTAMOS DEL SISTEMA ====\n")
+(display (historial-prestamos-sistema b1.15))
     
     
-;    (display "=== JOSE SUSPENDIDO INTENTA TOMAR LIBRO ===\n")
-;    (define b13-falla (tomar-prestamo b13 1 102 2 (get-fecha b13)))
-;    (display "¿Puede tomar '1984'? ")
-;    (display (eq? b13 b13-falla))
-;    (display " (#t = No puede, está suspendido)\n\n")
-    
-    
-;    (display "=== CARLOS TOMA EL LIBRO DEVUELTO ===\n")
-;    (display "Carlos toma 'El Hobbit' (ya disponible)\n")
-;    (define b14 (tomar-prestamo b13 2 101 3 (get-fecha b13)))
-;    (display "Préstamo exitoso para Carlos\n\n")
-    
-    
-;    (display "=== JOSE PAGA TODA SU DEUDA ===\n")
-;    (display "Jose paga los $150 restantes\n")
-;    (define b15 (pagar-deuda b14 1 150))
-;    (define jose-libre (obtener-usuario b15 1))
-;    (display "Deuda: $") (display (obtener-deuda jose-libre)) (newline)
-;    (display "¿Suspendido? ") (display (usuario-suspendido? jose-libre))
-;    (display " (No - pagó todo)\n\n")
-    
-    
-;    (display "=== JOSE REACTIVO TOMA LIBRO ===\n")
-;    (display "Jose toma '1984'\n")
-;    (define b16 (tomar-prestamo b15 1 102 3 (get-fecha b15)))
-;    (display "✓ Préstamo exitoso - Jose activo nuevamente\n\n")
+(display "\n===== FIN DEL SCRIPT =====\n")
     
     
     (display "\n===== FIN DEL SCRIPT =====\n")
