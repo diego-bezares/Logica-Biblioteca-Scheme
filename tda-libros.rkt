@@ -94,7 +94,7 @@
           (list (get-id-libro l)
                 (get-titulo-libro l)
                 (get-autor-libro l)
-                (if (n-esimo-termino l 4 1)
+                (if (disponible? l)
                     #f
                     #t
                 )
