@@ -60,9 +60,9 @@
 ;DIAS->FECHA (Se pasa de un enterio dias a formato "DD/MM", considerando que todos los meses tienen 30 dias)
 (define (dias->fecha dias)
         (string-append 
-                (number->string (+ (modulo (- dias 1) 30) 1))
+                (if (< (+ (modulo (- dias 1) 30) 1) 10) (string-append "0" (number->string (+ (modulo (- dias 1) 30) 1))) (number->string (+ (modulo (- dias 1) 30) 1)))
                 "/"
-                (number->string (+ (quotient (- dias 1) 30) 1))
+                (if (< (+ (quotient (- dias 1) 30) 1) 10) (string-append "0" (number->string (+ (quotient (- dias 1) 30) 1))) (number->string (+ (quotient (- dias 1) 30) 1)))
         )
 )
 
@@ -83,9 +83,20 @@
 							(lambda (usuario)
 									(not (= (get-id-usuario usuario) (get-id-libro usuario-actualizado)))
 							)
-							(get-libros biblioteca)
+							(get-usuarios biblioteca)
 						)
 				usuario-actualizado		
+				)
+)
+
+;ACTUALIZAR-PRESTAMOS (Agrega a una copia de la lista de prestamos de la biblioteca un prestamo actualizado, quitando el original)
+(define (actualizar-prestamos biblioteca prestamo-actualizado)
+				(cons prestamo-actualizado (filter 
+											(lambda (prestamo)
+													(not (= (get-id-prestamo prestamo) (get-id-prestamo prestamo-actualizado)))
+											)
+											(get-prestamos biblioteca)
+										   )	
 				)
 )
 
@@ -95,6 +106,11 @@
 			1
 			(+ (get-id-prestamo (car prestamos)) 1)
 		)
+)
+
+;OBTENER-PRESTAMO (Busca un prestamo dentro de una lista de estos)
+(define (obtener-prestamo lista-prestamos id-prestamo)
+		(filter (lambda (prestamo) (= (get-id-prestamo prestamo) (id-prestamo)) lista-prestamos))
 )
 
 ;==============================
@@ -318,6 +334,12 @@
 ;Dom -> (Biblioteca) biblioteca, int id-usuario, int id-libro, int dias-solicitados, string fecha-actual
 ;Rec -> Biblioteca
 (define (tomar-prestamo biblioteca id-usuario id-libro dias-solicitados fecha-actual)
+	(let ([nuevo-prestamo (crear-prestamo (siguiente-id-prestamo (get-prestamos biblioteca))
+														id-usuario
+														id-libro
+														fecha-actual
+														dias-solicitados
+						  )])
         (if (and
                 (libro-disponible? biblioteca id-libro)
                 (not (usuario-suspenido? (obtener-usuario biblioteca id-usuario)))
@@ -326,15 +348,8 @@
                 (>=(get-limite-deuda biblioteca) (get-deuda-usuario (obtener-usuario biblioteca id-usuario)))
             )
                 (crear-biblioteca (actualizar-libros biblioteca (set-disponibilidad (buscar-libro biblioteca "id" id-libro)))
-								  (actualizar-usuarios biblioteca (set-prestamos (obtener-usuario biblioteca id-usuario) id-libro))
-								  (cons (crear-prestamo (siguiente-id-prestamo (get-prestamos biblioteca))
-														id-usuario
-														id-libro
-														fecha-actual
-														dias-solicitados
-										)
-
-								  )
+								  (actualizar-usuarios biblioteca (set-prestamos (obtener-usuario biblioteca id-usuario) nuevo-prestamo))
+								  (cons nuevo-prestamo (get-prestamos biblioteca))
 								  (get-max-libros-usuario biblioteca)
          						  (get-dias-max-prestamo biblioteca)
          						  (get-tasa-multa-diaria biblioteca)
@@ -345,6 +360,7 @@
                 )
 				biblioteca
         )
+	)
 
 )
 
@@ -370,19 +386,12 @@
 																		#f
 																		#t
 																	)
-																	(filter (lambda (id-libro-prestamos) (not (= id-libro id-libro-prestamos)))
-																			(get-prestamos-usuario (obtener-usuario biblioteca id-usuario))
-																	)
+																	(get-prestamos-usuario (obtener-usuario biblioteca id-usuario))
 																	
 																)
 														  )
 						  )
-						  (filter (lambda (prestamo) (and (not (= (get-id-prestamo-usuario prestamo) id-usuario))
-														  (not (= (get-id-prestamo-libro prestamo) id-libro))
-													 )	
-								  )
-								  (get-prestamos biblioteca)
-						  )
+						  (get-prestamos biblioteca)
 						  (get-max-libros-usuario biblioteca)
 						  (get-dias-max-prestamo biblioteca)
 						  (get-tasa-multa-diaria biblioteca)
@@ -395,6 +404,181 @@
 
 ;RF21
 ;Dom -> (Biblioteca) biblioteca, int id-usuario
+;Rec -> Biblioteca
+(define (suspender-usuario biblioteca id-usuario)
+		(if (activo? (obtener-usuario biblioteca id-usuario))
+			(crear-biblioteca (get-libros biblioteca)
+							  (actualizar-usuarios biblioteca (suspender-usuariotda (obtener-usuario biblioteca id-usuario)))
+							  (get-prestamos biblioteca)
+							  (get-max-libros-usuario biblioteca)
+							  (get-dias-max-prestamo biblioteca)
+							  (get-tasa-multa-diaria biblioteca)
+							  (get-limite-deuda biblioteca)
+							  (get-dias-max-retraso biblioteca)
+							  (get-fecha-inicial biblioteca)
+
+			)
+			biblioteca
+		)
+)
+
+;RF20
+;Dom -> (Biblioteca) biblioteca, int id-usuario, string fecha-actual
+;Rec -> Boolean
+(define (debe-suspenderse? biblioteca id-usuario fecha-actual)
+		(or (> (get-deuda-usuario (obtener-usuario biblioteca id-usuario)) (get-limite-deuda biblioteca))
+			(null? (filter (lambda (prestamo) 
+									(and (member (get-id-prestamo-libro prestamo) (map get-id-prestamo-libro (get-prestamos-usuario (obtener-usuario biblioteca id-usuario))))
+										 (> (calcular-dias-retraso (obtener-fecha-vencimiento prestamo) fecha-actual) (get-dias-max-retraso biblioteca))	
+									)
+						   )
+						   (get-prestamos biblioteca)
+					)
+			)
+
+		)
+)
+
+;RF22
+;Dom -> (Biblioteca) biblioteca, int id-prestamo, int dias-extra, string fecha-actual
+;Rec -> Biblioteca
+(define (renovar-prestamo biblioteca)
+		(lambda (id-prestamo)
+			(lambda (dias-extra)
+				(lambda (fecha-actual)
+					(let ([usuario (obtener-usuario biblioteca (get-id-prestamo-usuario (obtener-prestamo (get-prestamos biblioteca) id-prestamo)))]
+						  [prestamo (obtener-prestamo (get-prestamos biblioteca) id-prestamo)])
+										(if (and (not (null? (obtener-prestamo (get-prestamos biblioteca) id-prestamo)))
+												 (> (fecha->dias (obtener-fecha-vencimiento prestamo)) (fecha->dias fecha-actual))
+												 (usuario-suspendido? usuario)
+												 (null? (filter (lambda (prestamo) (< 0 (calcular-dias-retraso (obtener-fecha-vencimiento prestamo) fecha-actual))) (get-prestamos-usuario usuario)))
+												 (> (+ (get-dias-prestamo prestamo) dias-extra) (get-dias-max-prestamo biblioteca))
+											)
+											(crear-biblioteca
+																(get-libros biblioteca)
+																(actualizar-usuarios biblioteca (list (get-id-usuario usuario) 
+																									  (get-nombre-usuario usuario)
+																									  (get-deuda-usuario usuario)
+																									  (activo? usuario)
+																									  (cons (crear-prestamo id-prestamo 
+																															(get-id-usuario usuario)
+																															(get-id-prestamo-libro prestamo)
+																															(get-fecha-prestamo prestamo)
+																															(+ (get-dias-prestamo prestamo) dias-extra)
+																											)
+																											(filter (lambda (subprestamo) (not (= (get-id-prestamo subprestamo) id-prestamo))) (get-prestamos-usuario usuario))
+																									  )
+																								)
+																)
+																(actualizar-prestamos biblioteca (crear-prestamo id-prestamo 
+																												 (get-id-usuario usuario)
+																												 (get-id-prestamo-libro prestamo)
+																												 (get-fecha-prestamo prestamo)
+																												 (+ (get-dias-prestamo prestamo) dias-extra)
+																								 )
+																)
+																(get-max-libros-usuario biblioteca)
+															    (get-dias-max-prestamo biblioteca)
+															    (get-tasa-multa-diaria biblioteca)
+															    (get-limite-deuda biblioteca)
+															    (get-dias-max-retraso biblioteca)
+															    (get-fecha-inicial biblioteca)
+											)
+										biblioteca
+										)
+
+				)
+
+			)
+		)
+	)
+)
+
+;RF23
+;Dom -> (Biblioteca) biblioteca, int id-usuario, int monto
+;Rec -> Biblioteca
+(define (pagar-deuda biblioteca id-usuario monto)
+		(if (and (= 0 (- (get-deuda-usuario (obtener-usuario biblioteca id-usuario)) monto))
+				 (null? (filter (lambda (prestamo) (> (calcular-dias-retraso (obtener-fecha-vencimiento prestamo) (get-fecha-inicial biblioteca)) (get-dias-max-retraso biblioteca)))))
+			)
+			(crear-biblioteca (get-libros biblioteca)
+							  (actualizar-usuarios biblioteca (reactivar-usuario (obtener-usuario biblioteca id-usuario)))
+							  (get-prestamos biblioteca)
+							  (get-max-libros-usuario biblioteca)
+							  (get-dias-max-prestamo biblioteca)
+							  (get-tasa-multa-diaria biblioteca)
+							  (get-limite-deuda biblioteca)
+							  (get-dias-max-retraso biblioteca)
+							  (get-fecha-inicial biblioteca)
+
+			)
+			(crear-biblioteca (get-libros biblioteca)
+							  (actualizar-usuarios biblioteca (actualizar-deuda (- (get-deuda-usuario (obtener-usuario biblioteca id-usuario)) monto) (obtener-usuario biblioteca id-usuario)))
+							  (get-prestamos biblioteca)
+							  (get-max-libros-usuario biblioteca)
+							  (get-dias-max-prestamo biblioteca)
+							  (get-tasa-multa-diaria biblioteca)
+							  (get-limite-deuda biblioteca)
+							  (get-dias-max-retraso biblioteca)
+							  (get-fecha-inicial biblioteca)
+
+			)
+		)
+
+)
+
+;RF24
+;Dom -> (Biblioteca) biblioteca, int id-usuario
+;Rec -> String
+(define (historial-prestamos-usuario biblioteca id-usuario)
+  (let* ([prestamos (filter (lambda (p)
+                              (= (get-id-prestamo-usuario p) id-usuario))
+                            (get-prestamos biblioteca))]
+         [formateados (map (lambda (p)
+                             (string-append
+                              "Préstamo #" (number->string (get-id-prestamo p))
+                              " - Libro " (number->string (get-id-prestamo-libro p))
+                              " - Prestado: " (get-fecha-prestamo p)
+                              " - Vence: " (get-fecha-vencimiento p)
+                              " - " (if (> (fecha->dias (obtener-fecha-vencimiento prestamo)) (fecha->dias fecha-actual)) "Activo" "Inactivo")
+                              "\n"))
+                           prestamos)])
+    (if (null? prestamos)
+        ""  
+        (string-append "Historial Usuario "
+                       (number->string id-usuario) ":\n"
+                       (apply string-append formateados)))
+	)
+)
+
+;RF25
+;Dom -> (Biblioteca) biblioteca
+;Rec -> String
+(define (historial-prestamos-sistema biblioteca)
+  (let* ([prestamos (get-prestamos biblioteca)]
+         [formateados (map (lambda (p)
+                             (string-append
+                              "Préstamo #" (number->string (get-id-prestamo p)) ":"
+							  " Usuario " (number->string (get-id-prestamo-usuario p))
+                              " - Libro " (number->string (get-id-prestamo-libro p))
+                              " - Fecha: " (get-fecha-prestamo p)
+                              " - Días: " (get-dias-prestamo p)
+                              " - " (if (> (fecha->dias (obtener-fecha-vencimiento prestamo)) (fecha->dias fecha-actual)) "ACTIVO" "COMPLETADO")
+                              "\n"))
+                           prestamos)])
+    (if (null? prestamos)
+        ""  
+        (string-append (apply string-append formateados)))
+	)
+)
+
+;RF26
+;Dom -> (Biblioteca) bilioteca
+;Rec -> Biblioteca
+(define (procesar-dia biblioteca)
+		()
+
+)
 
 
 
