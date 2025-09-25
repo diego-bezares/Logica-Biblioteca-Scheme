@@ -18,7 +18,8 @@
 		 procesar-dia
 		 historial-prestamos-sistema
 		 historial-prestamos-usuario
-		 obtener-usuario 
+                 obtener-usuario
+                 obtener-deuda
 )
 
 
@@ -385,39 +386,64 @@
 ;Dom -> (Biblioteca) biblioteca, int id-usuario, int id-libro, string fecha-actual
 ;Rec -> Biblioteca
 (define (devolver-libro biblioteca id-usuario id-libro fecha-actual)
-		(crear-biblioteca (actualizar-libros biblioteca (set-disponibilidad (car (buscar-libro biblioteca "id" id-libro))))
-						  (actualizar-usuarios biblioteca (let ([total-deuda (+ (get-deuda-usuario (obtener-usuario biblioteca id-usuario))
-																				(calcular-multa (filter (lambda (prestamo) (and (= (get-id-prestamo-usuario prestamo) id-usuario)
-																																(= (get-id-prestamo-libro prestamo) id-libro)
-																											   			   )	
-																										)
-																										(get-prestamos biblioteca)
-																								)
-																								(get-tasa-multa-diaria biblioteca)
-																				)
-																)])
-																(list id-usuario
-																	(get-nombre-usuario (obtener-usuario biblioteca id-usuario))
-																	total-deuda 
-																	(if (> total-deuda (get-limite-deuda biblioteca))
-																		#f
-																		#t
-																	)
-																	(get-prestamos-usuario (obtener-usuario biblioteca id-usuario))
-																	
-																)
-														  )
-						  )
-						  (get-prestamos biblioteca)
-						  (get-max-libros-usuario biblioteca)
-						  (get-dias-max-prestamo biblioteca)
-						  (get-tasa-multa-diaria biblioteca)
-						  (get-limite-deuda biblioteca)
-						  (get-dias-max-retraso biblioteca)
-						  (get-fecha-inicial biblioteca)
-		)
-										
+		(let ([prestamo-a-devolver (car (filter (lambda (p) 
+                                                (and (= (get-id-prestamo-usuario p) id-usuario)
+                                                     (= (get-id-prestamo-libro p) id-libro)))
+                                            (get-prestamos biblioteca)))])
+      
+      (let ([usuario-actual (obtener-usuario biblioteca id-usuario)])
+        
+        
+        (let ([multa (calcular-multa prestamo-a-devolver 
+                                     fecha-actual 
+                                     (get-tasa-multa-diaria biblioteca))])
+          
+          (let ([total-deuda (+ (get-deuda-usuario usuario-actual) multa)])
+            
+            
+            (let ([prestamos-usuario-actualizados (filter (lambda (p) 
+                                                            (not (= (get-id-prestamo p) (get-id-prestamo prestamo-a-devolver)))) 
+                                                          (get-prestamos-usuario usuario-actual))]
+                  
+                  
+                  [prestamos-sistema-actualizados (filter (lambda (p) 
+                                                            (not (= (get-id-prestamo p) (get-id-prestamo prestamo-a-devolver)))) 
+                                                          (get-prestamos biblioteca))])
+              
+              
+              (crear-biblioteca 
+                
+                (actualizar-libros biblioteca (set-disponibilidad (car (buscar-libro biblioteca "id" id-libro))))
+                
+               
+                (actualizar-usuarios 
+                  biblioteca 
+                  (list (get-id-usuario usuario-actual)
+                        (get-nombre-usuario usuario-actual)
+                        total-deuda
+                        (if (> total-deuda (get-limite-deuda biblioteca)) #f #t)
+                        prestamos-usuario-actualizados 
+                  )
+                )
+                
+               
+                prestamos-sistema-actualizados 
+                
+                
+                (get-max-libros-usuario biblioteca)
+                (get-dias-max-prestamo biblioteca)
+                (get-tasa-multa-diaria biblioteca)
+                (get-limite-deuda biblioteca)
+                (get-dias-max-retraso biblioteca)
+                (get-fecha-inicial biblioteca)
+              )
+            )
+          )
+        )
+      )
+    )
 )
+										
 
 ;RF21
 ;Dom -> (Biblioteca) biblioteca, int id-usuario
@@ -516,10 +542,10 @@
 ;Rec -> Biblioteca
 (define (pagar-deuda biblioteca id-usuario monto)
 		(if (and (= 0 (- (get-deuda-usuario (obtener-usuario biblioteca id-usuario)) monto))
-				 (null? (filter (lambda (prestamo) (> (calcular-dias-retraso (obtener-fecha-vencimiento prestamo) (get-fecha-inicial biblioteca)) (get-dias-max-retraso biblioteca)))))
+				 (null? (filter (lambda (prestamo) (> (calcular-dias-retraso (obtener-fecha-vencimiento prestamo) (get-fecha-inicial biblioteca)) (get-dias-max-retraso biblioteca))) (get-prestamos-usuario (obtener-usuario biblioteca id-usuario))))
 			)
 			(crear-biblioteca (get-libros biblioteca)
-							  (actualizar-usuarios biblioteca (reactivar-usuario (obtener-usuario biblioteca id-usuario)))
+							  (actualizar-usuarios biblioteca (actualizar-deuda 0 (reactivar-usuario (obtener-usuario biblioteca id-usuario))))
 							  (get-prestamos biblioteca)
 							  (get-max-libros-usuario biblioteca)
 							  (get-dias-max-prestamo biblioteca)
@@ -579,13 +605,13 @@
 							  " Usuario " (number->string (get-id-prestamo-usuario p))
                               " - Libro " (number->string (get-id-prestamo-libro p))
                               " - Fecha: " (get-fecha-prestamo p)
-                              " - Días: " (get-dias-prestamo p)
+                              " - Días: " (number->string (get-dias-prestamo p))
                               " - " (if (> (fecha->dias (obtener-fecha-vencimiento p)) (fecha->dias (get-fecha-inicial biblioteca))) "ACTIVO" "COMPLETADO")
                               "\n"))
                            prestamos)])
     (if (null? prestamos)
         ""  
-        (string-append (apply string-append formateados)))
+        (apply string-append formateados))
 	)
 )
 
