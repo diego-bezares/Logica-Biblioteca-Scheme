@@ -104,31 +104,31 @@
 
 (define get-dias-max-prestamo
    (lambda (b)
-           (car (cadddr b))
+           (car (cdr (cdddr b)))
    )
 )
 
 (define get-tasa-multa-diaria
    (lambda (b)
-           (car (car (cadddr b)))
+           (car (cdr (cdr (cdddr b))))
    )
 )
 
 (define get-limite-deuda
    (lambda (b)
-           (car (car (car (cadddr b))))
+           (car (cdr (cdr (cdr (cdddr b)))))
    )
 )
 
 (define get-dias-max-retraso
    (lambda (b)
-           (car (car (car (car (cadddr b)))))
+           (car (cdr (cdr (cdr (cdr (cdddr b))))))
    )
 )
 
 (define get-fecha-inicial
    (lambda (b)
-           (car (car (car (car (car (cadddr b))))))
+           (car (cdr (cdr (cdr (cdr (cdr (cdddr b)))))))
    )
 )
 
