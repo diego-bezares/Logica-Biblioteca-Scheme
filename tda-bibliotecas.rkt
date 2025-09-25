@@ -44,30 +44,6 @@
 
 
 
-
-;------------------------------------------------------
-;------------------------------------------------------
-; AUX (SACAR EL N-ÉSIMO TÉRMINO DE UNA LISTA)
-
-(define n-esimo-termino
-  (lambda (l n i)
-          (if (= i n)
-              (car l)
-              (n-esimo-termino (cdr l) n (+ i 1))
-          )
-  )
-)
-
-;-----------------------------------------------------
-;-----------------------------------------------------
-
-
-
-
-
-
-
-
 ;----------CONSTRUCTORES----------
 (define init-biblioteca
    (lambda (libros usuarios prestamos max-libros-usuario dias-max-prestamo tasa-multa-diaria limite-deuda dias-max-retraso fecha-inicial)
@@ -104,55 +80,55 @@
 ;-----------SELECTORES-----------
 (define get-libros
    (lambda (b)
-           (n-esimo-termino b 1 1)
+           (car b)
    )
 )
 
 (define get-usuarios
    (lambda (b)
-           (n-esimo-termino b 2 1)
+           (cadr b)
    )
 )
 
 (define get-prestamos
    (lambda (b)
-           (n-esimo-termino b 3 1)
+           (caddr b)
    )
 )
 
 (define get-max-libros-usuario
    (lambda (b)
-           (n-esimo-termino b 4 1)
+           (cadddr b)
    )
 )
 
 (define get-dias-max-prestamo
    (lambda (b)
-           (n-esimo-termino b 5 1)
+           (caddddr b)
    )
 )
 
 (define get-tasa-multa-diaria
    (lambda (b)
-           (n-esimo-termino b 6 1)
+           (car (caddddr b))
    )
 )
 
 (define get-limite-deuda
    (lambda (b)
-           (n-esimo-termino b 7 1)
+           (car (car (caddddr b)))
    )
 )
 
 (define get-dias-max-retraso
    (lambda (b)
-           (n-esimo-termino b 8 1)
+           (car (car (car (caddddr b))))
    )
 )
 
 (define get-fecha-inicial
    (lambda (b)
-           (n-esimo-termino b 9 1)
+           (car (car (car (car (caddddr b)))))
    )
 )
 
