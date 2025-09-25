@@ -18,6 +18,7 @@
 		 procesar-dia
 		 historial-prestamos-sistema
 		 historial-prestamos-usuario
+		 obtener-usuario 
 )
 
 
