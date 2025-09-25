@@ -102,3 +102,49 @@
 (display "=== PROCESAR DÍA ===\n")
 (define b1.13 (procesar-dia b1.12))
 (display "Fecha actual: ") (display (get-fecha b1.13)) (newline)
+;(define b1.14 (devolver-libro b1.13 2 102 (get-fecha b1.13))) ******
+;(display "Sofía devuelve el libro y sigue suspendida") *******
+;    (define jose-deudor (obtener-usuario b12 1))
+;    (display "Deuda de Jose: $") (display (obtener-deuda jose-deudor)) (newline)
+;    (display "¿Suspendido? ") (display (usuario-suspendido? jose-deudor))
+;    (display " (Sí - excedió días de retraso)\n\n")
+    
+    
+;    (display "=== INTENTO DE PAGO PARCIAL ===\n")
+;    (display "Jose paga $50\n")
+;    (define b13 (pagar-deuda b12 1 50))
+;    (define jose-parcial (obtener-usuario b13 1))
+;    (display "Deuda restante: $") (display (obtener-deuda jose-parcial)) (newline)
+;    (display "¿Sigue suspendido? ") (display (usuario-suspendido? jose-parcial))
+;    (display " (Sí - debe pagar TODO)\n\n")
+    
+    
+;    (display "=== JOSE SUSPENDIDO INTENTA TOMAR LIBRO ===\n")
+;    (define b13-falla (tomar-prestamo b13 1 102 2 (get-fecha b13)))
+;    (display "¿Puede tomar '1984'? ")
+;    (display (eq? b13 b13-falla))
+;    (display " (#t = No puede, está suspendido)\n\n")
+    
+    
+;    (display "=== CARLOS TOMA EL LIBRO DEVUELTO ===\n")
+;    (display "Carlos toma 'El Hobbit' (ya disponible)\n")
+;    (define b14 (tomar-prestamo b13 2 101 3 (get-fecha b13)))
+;    (display "Préstamo exitoso para Carlos\n\n")
+    
+    
+;    (display "=== JOSE PAGA TODA SU DEUDA ===\n")
+;    (display "Jose paga los $150 restantes\n")
+;    (define b15 (pagar-deuda b14 1 150))
+;    (define jose-libre (obtener-usuario b15 1))
+;    (display "Deuda: $") (display (obtener-deuda jose-libre)) (newline)
+;    (display "¿Suspendido? ") (display (usuario-suspendido? jose-libre))
+;    (display " (No - pagó todo)\n\n")
+    
+    
+;    (display "=== JOSE REACTIVO TOMA LIBRO ===\n")
+;    (display "Jose toma '1984'\n")
+;    (define b16 (tomar-prestamo b15 1 102 3 (get-fecha b15)))
+;    (display "✓ Préstamo exitoso - Jose activo nuevamente\n\n")
+    
+    
+    (display "\n===== FIN DEL SCRIPT =====\n")
