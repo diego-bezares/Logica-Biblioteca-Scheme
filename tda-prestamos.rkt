@@ -94,7 +94,7 @@
 
 (define get-dias-prestamo
   (lambda (p)
-          (caddddr p)
+          (car (cadddr p))
   )
 )
 
