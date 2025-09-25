@@ -26,22 +26,6 @@
 ;  activo -> booleano 
 ;  prestamos -> lista
 
-;------------------------------------------------------
-;------------------------------------------------------
-; AUX (SACAR EL N-ÉSIMO TÉRMINO DE UNA LISTA)
-
-(define n-esimo-termino
-  (lambda (l n i)
-          (if (= i n)
-              (car l)
-              (n-esimo-termino (cdr l) n (+ i 1))
-          )
-  )
-)
-
-;-----------------------------------------------------
-;-----------------------------------------------------
-
 
 
 ;--------CONSTRUCTOR---------
@@ -70,19 +54,19 @@
 ;---------SELECTORES--------
 (define get-id-usuario 
   (lambda (u) 
-          (n-esimo-termino u 1 1)))
+          (car u)))
 (define get-nombre-usuario 
   (lambda (u) 
-          (n-esimo-termino u 2 1)))
+          (cadr u)))
 (define get-deuda-usuario 
   (lambda (u) 
-          (n-esimo-termino u 3 1)))
+          (caddr u)))
 (define activo? 
   (lambda (u) 
-          (n-esimo-termino u 4 1)))
+          (cadddr u)))
 (define get-prestamos-usuario 
   (lambda (u) 
-          (n-esimo-termino u 5 1)))
+          (caddddr u)))
 
 
 
