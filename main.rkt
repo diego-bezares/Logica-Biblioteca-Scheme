@@ -70,7 +70,7 @@
 
 ;FECHA->DIAS (Se pasa de formato "DD/MM" a un entero de dias, considerando que todos los meses tienen 30 dias)
 (define (fecha->dias fecha)
-        (+ (* (- (n-esimo-termino (fecha->lista fecha) 2 1) 1) 30) (n-esimo-termino (fecha->lista fecha) 1 1))
+        (+ (* (- (cadr (fecha->lista fecha)) 1) 30) (car (fecha->lista fecha)))
 )
 
 ;DIAS->FECHA (Se pasa de un enterio dias a formato "DD/MM", considerando que todos los meses tienen 30 dias)
@@ -301,7 +301,7 @@
 (define (libro-disponible? b id-libro)
         (if (null? (buscar-libro b "id" id-libro))
                 #f
-                (disponible? (buscar-libro b "id" id-libro))
+                (disponible? (car (buscar-libro b "id" id-libro)))
         )
 )
 
@@ -363,7 +363,7 @@
                 (>= (get-dias-max-prestamo biblioteca) dias-solicitados)
                 (>=(get-limite-deuda biblioteca) (get-deuda-usuario (obtener-usuario biblioteca id-usuario)))
             )
-                (crear-biblioteca (actualizar-libros biblioteca (set-disponibilidad (buscar-libro biblioteca "id" id-libro)))
+                (crear-biblioteca (actualizar-libros biblioteca (set-disponibilidad (car (buscar-libro biblioteca "id" id-libro))))
 								  (actualizar-usuarios biblioteca (set-prestamos (obtener-usuario biblioteca id-usuario) nuevo-prestamo))
 								  (cons nuevo-prestamo (get-prestamos biblioteca))
 								  (get-max-libros-usuario biblioteca)
@@ -384,7 +384,7 @@
 ;Dom -> (Biblioteca) biblioteca, int id-usuario, int id-libro, string fecha-actual
 ;Rec -> Biblioteca
 (define (devolver-libro biblioteca id-usuario id-libro fecha-actual)
-		(crear-biblioteca (actualizar-libros biblioteca (set-disponibilidad (buscar-libro biblioteca "id" id-libro)))
+		(crear-biblioteca (actualizar-libros biblioteca (set-disponibilidad (car (buscar-libro biblioteca "id" id-libro))))
 						  (actualizar-usuarios biblioteca (let ([total-deuda (+ (get-deuda-usuario (obtener-usuario biblioteca id-usuario))
 																				(calcular-multa (filter (lambda (prestamo) (and (= (get-id-prestamo-usuario prestamo) id-usuario)
 																																(= (get-id-prestamo-libro prestamo) id-libro)
