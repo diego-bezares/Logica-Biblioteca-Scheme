@@ -97,7 +97,7 @@
 (define (actualizar-usuarios biblioteca usuario-actualizado)
 				(append (filter 
 							(lambda (usuario)
-									(not (= (get-id-usuario usuario) (get-id-libro usuario-actualizado)))
+									(not (= (get-id-usuario usuario) (get-id-usuario usuario-actualizado)))
 							)
 							(get-usuarios biblioteca)
 						)
@@ -126,7 +126,7 @@
 
 ;OBTENER-PRESTAMO (Busca un prestamo dentro de una lista de estos)
 (define (obtener-prestamo lista-prestamos id-prestamo)
-		(filter (lambda (prestamo) (= (get-id-prestamo prestamo) (id-prestamo)) lista-prestamos))
+		(filter (lambda (prestamo) (= (get-id-prestamo prestamo) id-prestamo)) lista-prestamos)
 )
 
 ;==============================
@@ -361,7 +361,7 @@
                 (not (usuario-suspendido? (obtener-usuario biblioteca id-usuario)))
                 (< (length (get-prestamos-usuario (obtener-usuario biblioteca id-usuario))) (get-max-libros-usuario biblioteca))
                 (>= (get-dias-max-prestamo biblioteca) dias-solicitados)
-                (>=(get-limite-deuda biblioteca) (get-deuda-usuario (obtener-usuario biblioteca id-usuario)))
+                (>= (get-limite-deuda biblioteca) (get-deuda-usuario (obtener-usuario biblioteca id-usuario)))
             )
                 (crear-biblioteca (actualizar-libros biblioteca (set-disponibilidad (car (buscar-libro biblioteca "id" id-libro))))
 								  (actualizar-usuarios biblioteca (set-prestamos (obtener-usuario biblioteca id-usuario) nuevo-prestamo))
@@ -443,15 +443,15 @@
 ;Rec -> Boolean
 (define (debe-suspenderse? biblioteca id-usuario fecha-actual)
 		(or (> (get-deuda-usuario (obtener-usuario biblioteca id-usuario)) (get-limite-deuda biblioteca))
-			(null? (filter (lambda (prestamo) 
+			(not (null? (filter (lambda (prestamo) 
 									(and (member (get-id-prestamo-libro prestamo) (map get-id-prestamo-libro (get-prestamos-usuario (obtener-usuario biblioteca id-usuario))))
 										 (> (calcular-dias-retraso (obtener-fecha-vencimiento prestamo) fecha-actual) (get-dias-max-retraso biblioteca))	
 									)
 						   )
 						   (get-prestamos biblioteca)
 					)
+				 )
 			)
-
 		)
 )
 
@@ -595,7 +595,7 @@
 		(let ([nueva-fecha-actual (dias->fecha (+ (fecha->dias (get-fecha-inicial biblioteca)) 1))])
 				(crear-biblioteca (get-libros biblioteca)
 								  (map (lambda (usuario) (if (debe-suspenderse? biblioteca (get-id-usuario usuario) nueva-fecha-actual)
-															 (suspender-usuario biblioteca (get-id-usuario usuario))
+															 (suspender-usuariotda usuario)
 															 usuario
 														   )
 									     )
