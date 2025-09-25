@@ -7,8 +7,7 @@
          get-autor-libro
          disponible?
          set-disponibilidad
-         string-minus
-         n-esimo-termino) 
+         string-minus) 
 
 
 ;---------------------------------
@@ -32,17 +31,6 @@
 
 ;------------------------------------------------------
 ;------------------------------------------------------
-; AUX (SACAR EL N-ÉSIMO TÉRMINO DE UNA LISTA)
-
-(define n-esimo-termino
-  (lambda (l n i)
-          (if (= i n)
-              (car l)
-              (n-esimo-termino (cdr l) n (+ i 1))
-          )
-  )
-)
-
 ; AUX (CONVIERTE A MINÚSCULA TODO UN STRING)
 (define string-minus
   (lambda (str)
@@ -87,16 +75,16 @@
 ;-----------SELECTORES------------
 (define get-id-libro 
   (lambda (l) 
-          (n-esimo-termino l 1 1)))
+          (car l)
 (define get-titulo-libro 
   (lambda (l) 
-          (n-esimo-termino l 2 1)))
+          (cadr l)
 (define get-autor-libro 
   (lambda (l) 
-          (n-esimo-termino l 3 1)))
+          (caddr l)
 (define disponible? 
   (lambda (l) 
-          (n-esimo-termino l 4 1)))
+          (cadddr l)
 
 
 
