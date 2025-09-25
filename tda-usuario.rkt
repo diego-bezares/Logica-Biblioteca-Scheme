@@ -66,7 +66,7 @@
           (cadddr u)))
 (define get-prestamos-usuario 
   (lambda (u) 
-          (car (cadddr u))))
+          (car (cdr (cadddr u)))))
 
 
 
