@@ -124,5 +124,3 @@
     
 (display "\n===== FIN DEL SCRIPT =====\n")
     
-    
-    (display "\n===== FIN DEL SCRIPT =====\n")
